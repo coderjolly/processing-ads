@@ -73,6 +73,7 @@ that different types of Convolution blocks were tested for the advertisement dat
 </ol>
 
 ## Results
+
 The dataset used in this study presented the the multiclass, multilabel classification problem. Thus, to make the model predict multiple labels, a sigmoid layer had to be added before the loss function to get 0 or 1 prediction for all the classes of the data. To achieve this, the BCEWITHLOGITSLOSS function of PyTorch was used as it combines the Sigmoid layer and the binary cross entropy loss function in one single class. This makes theses operations more numerically stable than their separate counterparts.
 
 The pre-trained weights were chosen to be the IMAGENET1K V2 weights and only the last classification layer was fine-tuned. The rationale behind performing this type
@@ -87,3 +88,37 @@ of shallow-tuning was that the Imagenet data is very similar to the advertisemen
 | Resnet-50         |`0.179`   |`50s` | `10`      | `0`         |
 
 The best model which in this case was the **EfficientNet B3** model was used to do further analysis like visualizing the trained filters and using Grad-CAM to understand which areas of the image the model focused on to generate the predictions.
+
+## Observations
+
+- Looking at the above table it can be seen that the MobileNet architecture
+was the fastest to train per epoch. It took less time per epoch but, if number of epochs required to converge is considered, it does not train the fastest.
+- The lowest validation set loss for ResNet was at epoch 0. This means that the model started overfitting right after the first epoch in terms of the loss. However, it took 10 epochs to converge on the F1 score.
+- EfficientNet model performed the best in terms of the overall F1 score on the test set. Another surprising observation is that the EfficientNet model takes the longest to train per epoch even though the number of trainable parameters is nowhere close to ResNet.
+
+![confusion-matrix](/figures/confusion-matrix.png)
+
+- In the above figure,  it can be seen that the model classifies the labels Fashionable, Feminine, and Eager the best which are the classes that have the most number of training examples. This shows that if we increase the training dataset size, the models could improve a lot.
+
+## Grad-CAM Visualizations
+
+As the EfficientNet B3 model produced the best F1 score
+on the test set, it was used to generate the GradCAM visualizations to understand the model outputs.
+
+![first-layer-gradcam](/figures/first-layer-gradcam.png)
+
+We can see from the above figure that in the first layer of the network the model identifies prominent edges of the image. We can confirm this by looking at the filters of the first layer. Most of the filters look like they identify edges and corners.
+
+![second-layer-gradcam](/figures/second-layer-gradcam.png)
+
+In the middle layer of the network, the model is looking at many different features but isn’t looking at the most relavant features for that label. 
+
+![third-layer-gradcam](/figures/third-layer-gradcam.png)
+
+And lastly, in the final layer of the network, the model looks only at the relavant features of the image depending on the current label. For example, here it is focusing on the player playing football for the ’Active’ label.
+
+## Conclusion
+
+- Visually looking at the gradcam visualizations and the predictions it is clear that the model is performing much better than what the F1 scores show. 
+- The low performance of the models in this study can be attributed to the low quality of the labels along with a lack of available training data. Even though the convolutional layers of the EfficientNet model were not fine-tuned, it was observed that the model could find relavant features in the image depending on the label. 
+- This shows that transfer learning is a powerful tool to train models and reduce turn-around times. Transfer learning enables the use of deep learning models even when the amount of available data is very less.

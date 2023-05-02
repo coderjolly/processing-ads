@@ -1,5 +1,5 @@
 
-# Processing ADs
+# Understanding Image Advertisements for Predicting Sentiments
 Promotion of products is now a common practice and is heavily controlled by broadcasting of advertisements. Image based advertisements are still one of the best ways to promote products but it is painstakingly difficult to personalize the content for the target audience and covey the sentiments. It is proven that an image can be perceived in different manners and hence different emotions can be conveyed via them. This study tries to compare three backbone deep learning architectures namely, ResNet 50, MobileNetv3 Large and EfficientNet B3 on an image advertisement dataset to classify the underlying sentiments being perceived by the consumers. Transfer learning is used to mitigate the small dataset problem.
 
 EfficientNet performed the best overall but the performance was still very poor. Grad-CAM visualizations confirmed our understanding of this model and helped us gain more confidence on the performance of the model.
